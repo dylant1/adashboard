@@ -5,15 +5,16 @@
 <script lang='ts'>
   import type { PageData } from './$types';
   export let data: PageData;
-  import { SupabaseClient } from '$lib/db';
-  import { page } from '$app/stores';
+  //import { SupabaseClient } from '$lib/db';
+  //import { page } from '$app/stores';
 
 
-async function signInWithGoogle() {
-  const { data, error } = await SupabaseClient.auth.signInWithOAuth({
-    provider: 'google',
-  })
-}
+//async function signInWithGoogle() {
+  //const { data, error } = await SupabaseClient.auth.signInWithOAuth({
+    //provider: 'google',
+  //
+  //})
+//}
 
 
 </script>
@@ -26,8 +27,3 @@ async function signInWithGoogle() {
   4. Scrap EF website
 </div>
 
-{#if !$page.data.session}
-  <button on:click={signInWithGoogle}>Sign in with Google</button>
-{:else}
-  <button on:click={() => SupabaseClient.auth.signOut()}>Sign out</button>
-{/if}
