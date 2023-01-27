@@ -6,7 +6,7 @@
   import type { PageData } from './$types';
   export let data: PageData;
   //import { SupabaseClient } from '$lib/db';
-  //import { page } from '$app/stores';
+  import { page } from '$app/stores';
 
 
 //async function signInWithGoogle() {
@@ -26,4 +26,4 @@
   3. Setup Canvas API
   4. Scrap EF website
 </div>
-
+<a href = "/login">Login</a>
