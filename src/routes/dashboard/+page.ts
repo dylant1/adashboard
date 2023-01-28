@@ -1,44 +1,61 @@
 import type { PageLoad } from './$types'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
-import { redirect } from '@sveltejs/kit'
 
 export const load: PageLoad = async (event) => {
   const { session, supabaseClient } = await getSupabase(event)
+
   if (!session) {
-    //throw redirect(303, '/')
-    console.log("not logged in")
     return {
       user: null,
-      tableData: null
+      profile_table: null,
+      canvas_assignments: null
     }
   }
 
-  //TODO: Maybe create this in a PageServerLoad function?
-  // or even in teh layout.server.ts or something i forgot what its called
-  const { data: profileData } = await supabaseClient
+  //TODO: Maybe create this in a PageServerLoad function or layout.ts?
+  const { data: possible_profile_data } = await supabaseClient
     .from('profiles')
     .select('*')
-    .eq('id', session.user.id)
-  if (!profileData || profileData.length === 0) {
+    .limit(1)
+    .eq('id', session.user.id);
+  if (!possible_profile_data || possible_profile_data.length === 0) {
     await supabaseClient
       .from('profiles')
-      .insert([{ id: session.user.id, email: session.user.email }])
-    console.log('created profile')
+      .insert([{ id: session.user.id, email: session.user.email }]);
+    console.log('Created new profile');
   }
-  const { data: tableData } = await supabaseClient
+  const { data: profile_table } = await supabaseClient
     .from('profiles')
     .select('*')
-    .eq('id', session.user.id)
+    .limit(1)
+    .eq('id', session.user.id);
 
-  if (!tableData || tableData.length === 0) {
+
+  if (!profile_table || profile_table.length === 0) {
     return {
       user: session.user,
-      tableData: null
+      profile_table: null,
+      canvas_assignments: null
     }
   }
+
+  
+  const token = profile_table[0].canvas_token;
+  const canvas_assignments_response = await event.fetch(
+    "/api/canvas",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': token
+      },
+    }
+  );
+
 
   return {
     user: session.user,
-    tableData: tableData[0]
+    profile_table: profile_table[0],
+    canvas_assignments: await canvas_assignments_response.json()
   }
 }

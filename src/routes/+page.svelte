@@ -5,25 +5,23 @@
 <script lang='ts'>
   import type { PageData } from './$types';
   export let data: PageData;
-  //import { SupabaseClient } from '$lib/db';
   import { page } from '$app/stores';
-
-
-//async function signInWithGoogle() {
-  //const { data, error } = await SupabaseClient.auth.signInWithOAuth({
-    //provider: 'google',
-  //
-  //})
-//}
-
 
 </script>
 
+<h1>Landing Page</h1>
 <div>
-  TODO:
-  1. Allow user to paste canvas token
-  2. Allow user to enter netid and password
-  3. Setup Canvas API
-  4. Scrap EF website
+  <a href = "/login">Login/Logout</a>
 </div>
-<a href = "/login">Login</a>
+<div>
+  <a href= "/dashboard">Dashboard</a>
+</div>
+
+{#if $page.data.session}
+  <p>Logged in as {$page.data.session.user.email}</p>
+{/if}
+
+{#if !$page.data.session}
+  <p>Not logged in</p>
+{/if}
+
