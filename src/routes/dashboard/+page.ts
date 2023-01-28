@@ -51,11 +51,16 @@ export const load: PageLoad = async (event) => {
       },
     }
   );
+  const canvas_assignments = await canvas_assignments_response.json();
+  //combine all the arrays inside the canvas_assignments object
+  const all_assignments = Object.values(canvas_assignments).flat();
+  console.log(all_assignments);
+
 
 
   return {
     user: session.user,
     profile_table: profile_table[0],
-    canvas_assignments: await canvas_assignments_response.json()
+    canvas_assignments: all_assignments
   }
 }

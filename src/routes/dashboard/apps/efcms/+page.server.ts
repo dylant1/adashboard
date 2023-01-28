@@ -12,11 +12,13 @@ export const actions: Actions = {
     const id = session.user.id;
 
     const form_data = await event.request.formData();
-    const accessToken = form_data.get('access_token');
+    const ut_netid = form_data.get('ut_netid');
+    const ut_password = form_data.get('ut_password');
     const { error } = await supabaseClient
     .from('profiles')
     .update({
-      canvas_token: accessToken,
+      ut_netid: ut_netid,
+      ut_password: ut_password,
     })
     .eq('id', id)
     .select()
@@ -28,11 +30,9 @@ export const actions: Actions = {
       }
     }
 
-
     return {
       status: 200,
       user: session.user,
     }
   }
 }
-
