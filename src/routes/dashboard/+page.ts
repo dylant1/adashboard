@@ -53,8 +53,22 @@ export const load: PageLoad = async (event) => {
   );
   const canvas_assignments = await canvas_assignments_response.json();
   //combine all the arrays inside the canvas_assignments object
+  if (!canvas_assignments || canvas_assignments.length === 0) {
+    return {
+      user: session.user,
+      profile_table: profile_table[0],
+      canvas_assignments: []
+    }
+  }
   const all_assignments = Object.values(canvas_assignments).flat();
-  console.log(all_assignments);
+  //if the user has no assignments, return an empty array
+  if (!all_assignments || all_assignments.length === 0) {
+    return {
+      user: session.user,
+      profile_table: profile_table[0],
+      canvas_assignments: []
+    }
+  }
 
 
 

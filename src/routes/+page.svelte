@@ -6,6 +6,12 @@
   import type { PageData } from './$types';
   export let data: PageData;
   import { page } from '$app/stores';
+  import {onMount} from 'svelte';
+  //import {scrape} from '../lib/scrape';
+  //import scrape 
+  //import {scrape} from '$lib/efcmsScrape';
+
+
 
 </script>
 

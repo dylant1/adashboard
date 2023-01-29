@@ -9,3 +9,4 @@
   <input type="password" name="ut_password" placeholder="ut_password"/>
   <input type="submit" value="Submit" />
 </form>
+<a href="/dashboard/apps/efcms/sync">Sync data</a>
