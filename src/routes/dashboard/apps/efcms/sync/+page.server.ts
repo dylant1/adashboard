@@ -2,7 +2,7 @@ import type { PageServerLoad } from "./$types";
 import { getSupabase } from "@supabase/auth-helpers-sveltekit";
 import { scrape } from "$lib/efcmsScrape";
 //import the assignment interface
-import { IAssignment } from "lib/efcmsScrape";
+import type { IAssignment } from "$lib/efcmsScrape";
 export const load: PageServerLoad = async (event) => {
 
   const { session, supabaseClient } = await getSupabase(event);
