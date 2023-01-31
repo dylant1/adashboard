@@ -16,3 +16,22 @@
 </script>
 
 <slot />
+
+<style>
+  :global(html) {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #10172a;
+  }
+  :global(h2) {
+    color: white;
+  }
+  :global(p) {
+    color: #94A3b8;
+    padding: 0;
+    margin: 0;
+  }
+  :global(a) {
+    color: #38BDF8;
+  }
+</style>

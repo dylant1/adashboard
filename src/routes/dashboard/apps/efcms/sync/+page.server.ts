@@ -66,6 +66,53 @@ export const load: PageServerLoad = async (event) => {
     //efcms_assignments
   //)
   //.eq("id", session.user.id)
+  console.log(efcms_assignments);
+  //stringify the efcm_assignments array and then insert it into the database
+  //if the user already has an entry in the database, update it
+  //else create a new entry
+  const {data: possible_efcms_assignments, error: possible_efcms_assignments_error} = await supabaseClient
+  .from("efcms")
+  .select("*")
+  .eq("id", session.user.id)
+  .single();
+
+  if (possible_efcms_assignments_error) {
+    console.log(possible_efcms_assignments_error);
+  }
+  if (!possible_efcms_assignments || possible_efcms_assignments.length == 0) {
+    await supabaseClient
+    .from("efcms")
+    .insert(
+      {
+        id: session.user.id,
+        assignments: JSON.stringify(efcms_assignments)
+      }
+    )
+  } else {
+    await supabaseClient
+    .from("efcms")
+    .update(
+      {
+        assignments: JSON.stringify(efcms_assignments)
+      }
+    )
+    .eq("id", session.user.id)
+  }
+
+
+
+
+
+  //const { data, error } = await supabaseClient
+  //.from("efcms")
+  //.insert(
+    //{
+      //id: session.user.id,
+      //assignment: JSON.stringify(efcms_assignments)
+    //}
+  //)
+  //.eq("id", session.user.id)
+
 
 
   return {
