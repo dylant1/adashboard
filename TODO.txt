@@ -1,0 +1,20 @@
+Priority:
+Encrypt private access key (allow for decryption somehow)
+Clean up/add DRY functions /remove console logs
+Add better typing
+Add href links to efcms assignments
+Add schedule
+Add navbar/links on each page to other pages
+Update sync page (reroute to /dashboard on load maybe)
+
+Medium Priority:
+Add time
+Add calendar
+
+Low Priority:
+Update design
+Add landing page possibly
+Do more with the efcms web scraper
+Add ability to enter in other efcms classes other than 152 (+ add to table in db)
+Figure out a way to run sync automaticall in background (dont think its possible though)
+Add webassign - dont think its possible

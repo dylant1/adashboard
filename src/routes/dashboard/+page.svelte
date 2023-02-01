@@ -30,7 +30,6 @@
       courses = getCourses(canvas_assignments);
       course_codes = getCourseCodes(canvas_assignments);
     }
-    console.log(canvas_assignments);
     console.log(efcms_assignments);
 
   });
@@ -136,7 +135,7 @@
     {#each canvas_assignments as assignment}
       {#if assignment.course_code == code}
         <p>{assignment.name}</p>
-        <p>Due Date: {convertDate(assignment.due_at)} --- {daysFromNow(assignment.due_at)} days from now</p>
+        <p>Due Date: {convertDate(assignment.due_at)} ({daysFromNow(assignment.due_at)} days left)</p>
         <p>Points Possible: {assignment.points_possible}</p>
         <a href ={assignment.html_url}>Open in Canvas</a>
       {/if}
@@ -145,7 +144,6 @@
   {/each}
 {/if}
 {#if efcms_assignments}
-
   <div class="course_container">
   <h2>EF152</h2>
   {#each efcms_assignments as assignment}
@@ -173,9 +171,6 @@
   .course_container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    border: 1px solid white;
-    border-radius: 10px;
     margin: 10px;
     padding: 10px;
     height: fit-content;

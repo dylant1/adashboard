@@ -7,11 +7,11 @@ export interface IAssignment {
 		};
 		prep_questions_data: {
 			grade: number | null;
-			due_date: string | null;
+			due_date: string;
 		};
 		practice_questions_data: {
 			grade: number | null;
-			due_date: string;
+			due_date: string | null;
 		};
 	}
 
@@ -67,10 +67,10 @@ export const scrape = async (ut_netid: string, ut_password: string, classCode: s
 			const practice_questions_grade: number | null = getGrade(practice_questions_temp);
 
 			const learning_page_due_date = learning_pages_td[i].replace(/<nobr>/g, '').replace(/<\/nobr>/g, '').replace(/\n/g, '');
-			const practice_questions_due_date = learning_pages_td[i].replace(/<nobr>/g, '').replace(/<\/nobr>/g, '').replace(/\n/g, '');
-			let prep_questions_due_date: string | null = null;
+			let practice_questions_due_date: string | null = null;
+			const prep_questions_due_date: string = learning_pages_td[i].replace(/<nobr>/g, '').replace(/<\/nobr>/g, '').replace(/\n/g, '');
 			if (learning_pages_td[i + 5] != undefined) {
-				prep_questions_due_date = learning_pages_td[i + 5].replace(/<nobr>/g, '').replace(/<\/nobr>/g, '').replace(/\n/g, '');
+				practice_questions_due_date = learning_pages_td[i + 5].replace(/<nobr>/g, '').replace(/<\/nobr>/g, '').replace(/\n/g, '');
 			}
 
 			if (a_tag != null && a_tag.length >= 1) {
@@ -95,5 +95,5 @@ export const scrape = async (ut_netid: string, ut_password: string, classCode: s
 	}
 
 	await browser.close();
-	return efcms_assignments;
+	return efcms_assignments
 }

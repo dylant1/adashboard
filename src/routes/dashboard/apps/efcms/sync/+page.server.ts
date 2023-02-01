@@ -1,7 +1,6 @@
 import type { PageServerLoad } from "./$types";
 import { getSupabase } from "@supabase/auth-helpers-sveltekit";
 import { scrape } from "$lib/efcmsScrape";
-//import the assignment interface
 import type { IAssignment } from "$lib/efcmsScrape";
 export const load: PageServerLoad = async (event) => {
 
@@ -34,7 +33,6 @@ export const load: PageServerLoad = async (event) => {
     }
   }
 
-  //get the ut_netid and ut_password from the users profile
   const { ut_netid, ut_password } = profile;
 
   if (!ut_netid || !ut_password) {
@@ -44,32 +42,9 @@ export const load: PageServerLoad = async (event) => {
     }
   }
 
-
-
-  //this is an array of objects with the following properties
   const efcms_assignments: IAssignment[] = await scrape(ut_netid, ut_password, "152", "2023", "01");
 
-
-  //create the interface for the assignments
-
-
-  //insert the assignments into the database
-  //create table public.efcms (
-  //id uuid not null references auth.users on delete cascade,
-  //assignment text not null,
-
-  //primary key (id)
-//);
-  //const { data, error } = await supabaseClient
-  //.from("efcms")
-  //.insert(
-    //efcms_assignments
-  //)
-  //.eq("id", session.user.id)
   console.log(efcms_assignments);
-  //stringify the efcm_assignments array and then insert it into the database
-  //if the user already has an entry in the database, update it
-  //else create a new entry
   const {data: possible_efcms_assignments, error: possible_efcms_assignments_error} = await supabaseClient
   .from("efcms")
   .select("*")
@@ -98,22 +73,6 @@ export const load: PageServerLoad = async (event) => {
     )
     .eq("id", session.user.id)
   }
-
-
-
-
-
-  //const { data, error } = await supabaseClient
-  //.from("efcms")
-  //.insert(
-    //{
-      //id: session.user.id,
-      //assignment: JSON.stringify(efcms_assignments)
-    //}
-  //)
-  //.eq("id", session.user.id)
-
-
 
   return {
     status: 200,

@@ -28,10 +28,11 @@
   }
   :global(p) {
     color: #94A3b8;
-    padding: 0;
-    margin: 0;
   }
   :global(a) {
     color: #38BDF8;
+  }
+  :global(h3) {
+    color: white;
   }
 </style>
