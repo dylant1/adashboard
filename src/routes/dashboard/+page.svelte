@@ -5,6 +5,7 @@
   import type { ICanvasAssignment} from '$lib/canvasFunctions'
   import type {IEFCMSAssignments} from '$lib/efcmsFunctions'
   import { getCourseCodes } from '$lib/canvasFunctions'
+  import {navigating} from '$app/stores'
 
   interface IPageData {
     canvas_assignments: ICanvasAssignment[];
@@ -21,39 +22,45 @@
 
 </script>
 
-<div class="course_wrapper">
-  {#if !data}
-    <h2>Loading...</h2>
-  {:else}
-  {#each course_codes as code}
-    <div class="course_container">
-      <h2>{code}</h2>
-      {#each data.canvas_assignments as assignment}
-        {#if assignment.course_code == code}
-          <p>{assignment.name}</p>
-          <p>Due Date: {convertDate(assignment.due_at)} ({daysFromNow(assignment.due_at)} days left)</p>
-          <p>Points Possible: {assignment.points_possible}</p>
-          <a href ={assignment.html_url}>Open in Canvas</a>
-        {/if}
-      {/each}
-    </div>
-  {/each}
-  <div class="course_container">
-    <h2>EF152</h2>
-    {#each data.efcms_assignments as assignment}
-      <h3>{assignment.name}</h3>
-      <p>LP Grade: {assignment.learning_page_data.grade} ({
-        getEFCMSAssignmentDaysFromNow(assignment.learning_page_data.due_date)} days left)</p>
-      <p>Prep Grade: {assignment.prep_questions_data.grade} ({
-        getEFCMSAssignmentDaysFromNow(assignment.prep_questions_data.due_date)} days left)</p>
-      <p>Practice Grade: {assignment.practice_questions_data.grade} ({
-        getEFCMSAssignmentDaysFromNow(assignment.practice_questions_data.due_date)} days left)</p>
-    {/each}
+{#if $navigating}
+  <h2>Loading...</h2>
+{:else}
+  <div class="course_wrapper">
+    {#if !data}
+      <h2>Loading...</h2>
+    {:else}
+      {#if data.canvas_assignments && data.canvas_assignments.length > 0 }
+        {#each course_codes as code}
+          <div class="course_container">
+            <h2>{code}</h2>
+            {#each data.canvas_assignments as assignment}
+              {#if assignment.course_code == code}
+                <p>{assignment.name}</p>
+                <p>Due Date: {convertDate(assignment.due_at)} ({daysFromNow(assignment.due_at)} days left)</p>
+                <p>Points Possible: {assignment.points_possible}</p>
+                <a href ={assignment.html_url}>Open in Canvas</a>
+              {/if}
+            {/each}
+          </div>
+        {/each}
+      {/if}
+      {#if data.efcms_assignments && data.efcms_assignments.length > 0}
+        <div class="course_container">
+          <h2>EF152</h2>
+          {#each data.efcms_assignments as assignment}
+            <h3>{assignment.name}</h3>
+            <p>LP Grade: {assignment.learning_page_data.grade} ({
+              getEFCMSAssignmentDaysFromNow(assignment.learning_page_data.due_date)} days left)</p>
+            <p>Prep Grade: {assignment.prep_questions_data.grade} ({
+              getEFCMSAssignmentDaysFromNow(assignment.prep_questions_data.due_date)} days left)</p>
+            <p>Practice Grade: {assignment.practice_questions_data.grade} ({
+              getEFCMSAssignmentDaysFromNow(assignment.practice_questions_data.due_date)} days left)</p>
+          {/each}
+        </div>
+      {/if}
+    {/if}
   </div>
-  {/if}
-</div>
-
-
+{/if}
 <style>
   .course_wrapper {
     display: flex;
