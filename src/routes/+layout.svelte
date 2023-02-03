@@ -15,6 +15,14 @@
 
 </script>
 
+<nav>
+  <a href="/dashboard">Dashboard</a>
+  <a href="/dashboard/apps">Apps</a>
+  <a href="/dashboard/apps/efcms/sync">Sync EFCMS</a>
+  <a href = "/login">Login</a>
+
+</nav>
+
 <slot />
 
 <style>
@@ -22,6 +30,7 @@
     margin: 0;
     font-family: 'Inter', sans-serif;
     background-color: #10172a;
+    color: white;
   }
   :global(h2) {
     color: white;
@@ -35,4 +44,5 @@
   :global(h3) {
     color: white;
   }
+
 </style>

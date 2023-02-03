@@ -1,5 +1,6 @@
 import type { PageLoad } from './$types'
 import { getSupabase } from '@supabase/auth-helpers-sveltekit'
+import type {IEFCMSAssignments} from '$lib/efcmsFunctions'
 
 export const load: PageLoad = async (event) => {
   const { session, supabaseClient } = await getSupabase(event)
@@ -131,8 +132,11 @@ export const load: PageLoad = async (event) => {
   }
 
   // the assignment was due 2 days ago or is due in the next week
-   const upcoming_efcms_assignments = efcms_assignments.filter((assignment: any) => {
+   const upcoming_efcms_assignments = efcms_assignments.filter((assignment: IEFCMSAssignments) => {
     const due_date = assignment.learning_page_data.due_date;
+    if (!due_date) {
+      return false;
+    }
     const month_tmp: string = due_date.split(' ')[1];
     const due_data_month: number = months[month_tmp as keyof typeof months];
     const due_data_day = Number(due_date.split(' ')[2]);

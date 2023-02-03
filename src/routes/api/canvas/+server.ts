@@ -1,18 +1,6 @@
 import type { RequestHandler } from './$types';
-import { getSupabase } from '@supabase/auth-helpers-sveltekit'
+import type { ICanvasAssignment } from '$lib/canvasFunctions';
 
-interface ICanvasAssignment {
-    id: number;
-    name: string;
-    due_at: string;
-    points_possible: number;
-    html_url: string;
-    course_id: number;
-    course_name: string;
-    course_code: string;
-    course_html_url: string;
-  }
- 
 export const POST = (async (event) => {
   const access_token = event.request.headers.get('Authorization');
 
@@ -40,10 +28,9 @@ export const POST = (async (event) => {
       }
     });
   }
-  console.log(data);
   const courseIds = data.map((course: { id: number; }) => course.id);
-  const courseNames = data.map((course: { name: string; }) => course.name);
-  const courseCodes = data.map((course: { course_code: string; }) => course.course_code);
+  const canvas_course_names = data.map((course: { name: string; }) => course.name);
+  const canvas_course_codes = data.map((course: { course_code: string; }) => course.course_code);
   const dueAssignments = await Promise.all(courseIds.map(async (id: number) => {
     //The bucket=upcoming parameter only returns assignments due in the future (supposedly)
     const res = await fetch(`https://utk.instructure.com/api/v1/courses/${id}/assignments?bucket=upcoming&per_page=100`, {
@@ -55,11 +42,11 @@ export const POST = (async (event) => {
     });
     return await res.json();
   }));
-  const filteredAssignments = dueAssignments.filter((assignment: any) => assignment.length > 0);
-  const assignments = filteredAssignments.map((assignment: any) => {
-    const courseName = courseNames[courseIds.indexOf(assignment[0].course_id)];
-    const courseCode = courseCodes[courseIds.indexOf(assignment[0].course_id)];
-    return assignment.map((a: any) => {
+  const filteredAssignments = dueAssignments.filter((assignment: ICanvasAssignment[]) => assignment.length > 0);
+  const assignments = filteredAssignments.map((assignment: ICanvasAssignment[]) => {
+    const canvas_course_name = canvas_course_names[courseIds.indexOf(assignment[0].course_id)];
+    const canvas_course_code = canvas_course_codes[courseIds.indexOf(assignment[0].course_id)];
+    return assignment.map((a: ICanvasAssignment) => {
       return {
         id: a.id,
         name: a.name,
@@ -67,13 +54,12 @@ export const POST = (async (event) => {
         points_possible: a.points_possible,
         html_url: a.html_url,
         course_id: a.course_id,
-        course_name: courseName,
-        course_code: courseCode,
+        course_name: canvas_course_name,
+        course_code: canvas_course_code,
       }
     })
   });
 
-  //console.log(assignments);
   return new Response(JSON.stringify(assignments), {
     headers: {
       'Content-Type': 'application/json'

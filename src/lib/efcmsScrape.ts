@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import type { JSHandle } from 'puppeteer';
 export interface IAssignment {
 		name: string;
 		learning_page_data: {
@@ -30,7 +31,14 @@ export const scrape = async (ut_netid: string, ut_password: string, classCode: s
 
 	await page.waitForNavigation();
 	await page.$x("//a[contains(., 'Learning Pages')]");
-	const [el]: any = await page.$x("//a[contains(., 'Learning Pages')]");
+
+	interface ElementHandle<Type> {
+		click(): Promise<void>;
+	}
+	
+	const [el]: ElementHandle<HTMLAnchorElement>[]
+		= await page.$x("//a[contains(., 'Learning Pages')]")
+	
 	if (el) {
 		await el.click();
 	}
@@ -40,8 +48,7 @@ export const scrape = async (ut_netid: string, ut_password: string, classCode: s
 		const tds = Array.from(document.querySelectorAll('td'));
 		return tds.map(td => td.innerHTML);
 	});
-	//find the a tags with target="_blank"
-	//create the interface for the assignments
+
 	const efcms_assignments: IAssignment[] = [];
 
 	function getGrade(grade: string | number | null) {
@@ -57,7 +64,6 @@ export const scrape = async (ut_netid: string, ut_password: string, classCode: s
 			const a_tag = learning_pages_td[i + 1].match(/<a.*?>(.*?)<\/a>/);
 
 			//TODO: later on could add links to the assignments
-			//setup typescript interfaces for the assignments
 			const learning_pages_temp = learning_pages_td[i + 2].replace(/<a.*?>/g, '').replace(/<\/a>/g, '');
 			const prep_questions_temp = learning_pages_td[i + 3].replace(/<a.*?>/g, '').replace(/<\/a>/g, '');
 			const practice_questions_temp = learning_pages_td[i + 4].replace(/<a.*?>/g, '').replace(/<\/a>/g, '');
