@@ -37,6 +37,7 @@
 	"dependencies": {
 		"@supabase/auth-helpers-sveltekit": "^0.8.7",
 		"@supabase/supabase-js": "^2.4.1",
+		"daisyui": "^2.51.5",
 		"puppeteer": "^19.6.2",
 		"xmldom": "^0.6.0"
 	}
